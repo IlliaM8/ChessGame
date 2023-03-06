@@ -1,9 +1,9 @@
 import { Cell } from "../Cell";
 import { Colors } from "../Colors";
-import { Figure, FigureNames } from "./Figure";
+import { Figure, FigureNames, IFigure } from "./Figure";
 import whiteIcon from "../../assets/white-bishop.png";
 import blackIcon from "../../assets/black-bishop.png";
-export class Bishop extends Figure {
+export class Bishop extends Figure implements IFigure {
   constructor(color: Colors, cell: Cell) {
     super(color, cell);
     this.logo = color === Colors.BLACK ? blackIcon : whiteIcon;

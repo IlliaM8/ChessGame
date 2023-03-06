@@ -2,6 +2,10 @@ import { Cell } from "../Cell";
 import { Colors } from "../Colors";
 import icon from "../../assets/black-king.png";
 
+export interface IFigure {
+  canMove: (target: Cell) => boolean;
+}
+
 export enum FigureNames {
   FIGURE = "FIGURE",
   KING = "Король",
@@ -12,13 +16,17 @@ export enum FigureNames {
   PAWN = "Пешка",
 }
 
-export class Figure {
+export class Figure implements IFigure {
   logo: typeof icon | null;
   name: FigureNames;
+  isFirstStep: boolean = true;
+
   id: number;
+
   constructor(public color: Colors, public cell: Cell) {
     this.color = color;
     this.cell = cell;
+
     this.cell.figure = this;
     this.logo = null;
     this.name = FigureNames.FIGURE;
@@ -33,5 +41,4 @@ export class Figure {
     }
     return true;
   }
-  moveFigure(target: Cell): void {}
 }

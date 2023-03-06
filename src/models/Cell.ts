@@ -1,8 +1,19 @@
 import { Board } from "./Board";
 import { Colors } from "./Colors";
-import { Figure } from "./figures/Figure";
+import { Figure, FigureNames } from "./figures/Figure";
 
-export class Cell {
+interface ICell {
+  isEmpty(): boolean;
+  isEnemy(target: Cell): boolean;
+  isEmptyVertical(target: Cell): boolean;
+  isEmptyHorizontal(target: Cell): boolean;
+  isEmptyDiagonal(target: Cell): boolean;
+  setFigure(figure: Figure): void;
+  addLostFigure(figure: Figure): void;
+  moveFigure(target: Cell): void;
+}
+
+export class Cell implements ICell {
   available: boolean;
   id: number;
   constructor(
@@ -20,16 +31,16 @@ export class Cell {
     this.id = Math.random();
     this.available = false;
   }
-  isEmpty(): boolean {
+  public isEmpty(): boolean {
     return this.figure === null;
   }
-  isEnemy(target: Cell): boolean {
+  public isEnemy(target: Cell): boolean {
     if (target.figure) {
       return this.figure?.color !== target.figure.color;
     }
     return false;
   }
-  isEmptyVertical(target: Cell): boolean {
+  public isEmptyVertical(target: Cell): boolean {
     if (this.x !== target.x) {
       return false;
     }
@@ -42,7 +53,7 @@ export class Cell {
     }
     return true;
   }
-  isEmptyHorizontal(target: Cell): boolean {
+  public isEmptyHorizontal(target: Cell): boolean {
     if (this.y !== target.y) {
       return false;
     }
@@ -55,7 +66,7 @@ export class Cell {
     }
     return true;
   }
-  isEmptyDiagonal(target: Cell): boolean {
+  public isEmptyDiagonal(target: Cell): boolean {
     const absX = Math.abs(target.x - this.x);
     const absY = Math.abs(target.y - this.y);
     if (absY !== absX) return false;
@@ -69,22 +80,25 @@ export class Cell {
     return true;
   }
 
-  setFigure(figure: Figure): void {
+  public setFigure(figure: Figure) {
     this.figure = figure;
     this.figure.cell = this;
   }
-  addLostFigure(figure: Figure): void {
+  public addLostFigure(figure: Figure) {
     figure.color === Colors.BLACK
       ? this.board.lostBlackFigures.push(figure)
       : this.board.lostWhiteFigures.push(figure);
   }
   public moveFigure(target: Cell) {
     if (this.figure && this.figure?.canMove(target)) {
-      this.figure.moveFigure(target);
+      if (this.figure.name === FigureNames.PAWN) {
+        this.figure.isFirstStep = false;
+      }
       if (target.figure) {
         this.addLostFigure(target.figure);
       }
       target.setFigure(this.figure);
+
       this.figure = null;
     }
   }

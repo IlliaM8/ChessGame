@@ -11,7 +11,6 @@ const CellCopm: FC<CellCopmProps> = ({ cell, selected, click }) => {
   return (
     <div
       onClick={() => {
-        console.log(cell.available);
         click(cell);
       }}
       className={[

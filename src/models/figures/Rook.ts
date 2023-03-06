@@ -2,9 +2,9 @@ import whiteIcon from "../../assets/white-rook.png";
 import blackIcon from "../../assets/black-rook.png";
 import { Colors } from "../Colors";
 import { Cell } from "../Cell";
-import { Figure, FigureNames } from "./Figure";
+import { Figure, FigureNames, IFigure } from "./Figure";
 
-export class Rook extends Figure {
+export class Rook extends Figure implements IFigure {
   constructor(color: Colors, cell: Cell) {
     super(color, cell);
     this.logo = color === Colors.BLACK ? blackIcon : whiteIcon;

@@ -7,8 +7,13 @@ import { Knight } from "./figures/Knight";
 import { Pawn } from "./figures/Pawn";
 import { Queen } from "./figures/Quein";
 import { Rook } from "./figures/Rook";
-
-export class Board {
+interface IBoard {
+  initCells(): void;
+  highlightCells(selectedCell: Cell | null): void;
+  getCopyBoard(selectedCell: Board): Board;
+  getCells(x: number, y: number): Cell;
+}
+export class Board implements IBoard {
   cells: Cell[][] = [];
   lostBlackFigures: Figure[] = [];
   lostWhiteFigures: Figure[] = [];
